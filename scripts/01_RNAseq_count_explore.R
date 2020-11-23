@@ -28,6 +28,8 @@ outDir <- here("analysis", "01_count_data")
 outPrefix <- paste(outDir, "/", analysisName, sep = "")
 orgDb <- org.HSapiens.gencodev30.eg.db
 
+ngenes_pca <- 500                        ## top n genes to be used for PCA
+
 if(!dir.exists(outDir)){
   dir.create(path = outDir)
 }
@@ -151,10 +153,12 @@ pt_theme <- theme_bw() +
         plot.margin = unit(c(0.5,0.5,0.5,0.5),"cm")
   )
 
-plotPCA(rld, intgroup=c("genotype", "treatment"), ntop = 4000)
+
+plotPCA(rld, intgroup=c("genotype", "treatment"), ntop = ngenes_pca)
+
 
 pcaData <- plotPCA(rld, intgroup = c("genotype", "treatment", "condition"),
-                   returnData = TRUE, ntop = 4000)
+                   returnData = TRUE)
 percentVar <- sprintf("%.2f", 100 * attr(pcaData, "percentVar"))
 
 pcaData$genotype <- forcats::as_factor(pcaData$genotype)
@@ -207,8 +211,13 @@ ggsave(filename = paste(outPrefix, ".PCA.png", sep = ""), device = "png",
 normCountMat <- as.matrix(rldCount[, c(exptInfo$sampleId), drop = FALSE])
 rownames(normCountMat) <- rldCount$geneId
 
+## select top 4000 rows with highest variation
+rv <- matrixStats::rowVars(normCountMat)
+keep <- order(rv, decreasing=TRUE)[seq_len(min(ngenes_pca, length(rv)))]
+
 ## remove low count rows
-keep <- rowSums(normCountMat > 1) >= 2
+# keep<- rowSums(normCountMat > 1) >= 2
+
 normCountMatFiltered <- normCountMat[keep, ]
 
 ## transform the data such that the genes are columns and each sample is a row

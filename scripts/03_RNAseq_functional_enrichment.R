@@ -68,7 +68,7 @@ file_RNAseq_info <- args$config
 degResult <- args$deg
 
 # file_RNAseq_info <- here::here("data", "reference_data", "DESeq2_DEG_info.txt")
-# degResult <- "WT_MEKi_vs_WT_DMSO"
+# degResult <- "interaction_ARID1A_KO_MEKi"
 
 outDir <- paste(diffDataPath, degResult, sep = "/")
 outPrefix <- paste(outDir, degResult, sep = "/")
@@ -288,7 +288,7 @@ kegg_bar <- enrichment_bar(
   df = keggPlotDf,
   title = paste(degResult, "\ntop 10 enriched KEGG pathways in up and down DEGs"),
   pvalCol = "pvalue", termCol = "Pathway_Name",
-  colorCol = "category", countCol = "Significant"
+  colorCol = "category", countCol = "Observed"
 )
 
 png(filename = paste(outPrefix, ".KEGG_bar.png", sep = ""),
@@ -426,9 +426,6 @@ data.table::fwrite(
 )
 
 ###########################################################################
-topgo_res <- readr::read_tsv(file = paste(outPrefix, ".topGO.tab", sep = ""))
-keggp_res <- readr::read_tsv(file = paste(outPrefix, ".keggProfile.tab", sep = ""))
-uniqueFgsea <- readr::read_tsv(file = paste(outPrefix, ".fgsea.tab", sep = ""))
 
 ## write data to excel file
 descString <- paste("## log2FoldChange cutoff =", cutoff_up, "(up) /", cutoff_down, "(down)",

@@ -70,7 +70,7 @@ parser$add_argument(
 # parser$print_help()
 
 # file_RNAseq_info <- here::here("data", "reference_data", "DESeq2_DEG_info.txt")
-# analysisName <- "WT_MEKi_vs_WT_DMSO"
+# analysisName <- "ARID1A_KO_MEKi_vs_WT_DMSO"
 
 args <- parser$parse_args()
 
@@ -578,7 +578,7 @@ pt_volc <- volcano_plot(df = diffData,
                         lfc_col = "log2FoldChange",
                         fdr_cut = cutoff_fdr, lfc_cut = cutoff_lfc, 
                         markGenes = markGenes,
-                        ylimit = 4, xlimit = c(-4, 4))
+                        ylimit = 20, xlimit = c(-4, 4))
 
 # png(filename = paste(outPrefix, ".volcano.png", sep = ""), width = 2500, height = 3000, res = 280)
 # plot(pt_volc$plot)

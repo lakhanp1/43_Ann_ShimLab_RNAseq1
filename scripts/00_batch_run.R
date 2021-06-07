@@ -8,25 +8,26 @@ rm(list = ls())
 ### DESeq2 pairwise ###
 #######################
 
-# ## RNAseq DESeq2 differential gene expression batches
-# file_RNAseq_info <-here::here("data", "reference_data", "DESeq2_DEG_info.txt")
-# diffDataPath <- here::here("analysis", "02_DESeq2_diff")
-# script_deseq2 <- here::here("scripts", "02_DESeq2_pairwise.R")
-# 
-# runConfig <- suppressMessages(readr::read_tsv(file_RNAseq_info))
-# 
-# i <- 1
-# 
-# for (i in 1:nrow(runConfig)) {
-# 
-#   system2(
-#     command = "Rscript",
-#     args = c(script_deseq2, "--config", file_RNAseq_info, "--deg", runConfig$comparison[i]),
-#     stdout = paste("logs/stdouterr.DESeq2.", runConfig$comparison[i],".log", sep = ""),
-#     stderr = paste("logs/stdouterr.DESeq2.", runConfig$comparison[i],".log", sep = "")
-#   )
-# 
-# }
+## RNAseq DESeq2 differential gene expression batches
+file_RNAseq_info <-here::here("data", "reference_data", "DESeq2_DEG_info.txt")
+diffDataPath <- here::here("analysis", "02_DESeq2_diff")
+script_deseq2 <- here::here("scripts", "02_DESeq2_pairwise.R")
+
+runConfig <- suppressMessages(readr::read_tsv(file_RNAseq_info))
+
+i <- 1
+
+for (i in 1:nrow(runConfig)) {
+
+  system2(
+    command = "Rscript",
+    # args = c(script_deseq2, "--help"),
+    args = c(script_deseq2, "--config", file_RNAseq_info, "--deg", runConfig$comparison[i]),
+    stdout = paste("logs/stdouterr.DESeq2.", runConfig$comparison[i],".log", sep = ""),
+    stderr = paste("logs/stdouterr.DESeq2.", runConfig$comparison[i],".log", sep = "")
+  )
+
+}
 
 
 
@@ -79,36 +80,36 @@ for (i in 1:nrow(runConfig)) {
 #   
 # }
 
-###########################################################################
-#
-# ## copy results for sharing
-# file_RNAseq_info <-here::here("data", "reference_data", "DESeq2_DEG_info.txt")
-# diffDataPath <- here::here("analysis", "02_DESeq2_diff")
-#
-# runConfig <- suppressMessages(readr::read_tsv(file_RNAseq_info))
-#
-# tempStore <- here::here("analysis", "temp_store")
-# dir.create(tempStore)
-# i <- 1
-#
-# for (i in 1:nrow(runConfig)) {
-#
-#   newDir <- paste(tempStore, "/", runConfig$comparison[i], sep = "")
-#   dir.create(newDir)
-#
-#   file_deseq2Res <- paste(diffDataPath, "/", runConfig$comparison[i], "/", runConfig$comparison[i], ".DEG_all.xlsx", sep = "")
-#   file_enrich <- paste(diffDataPath, "/", runConfig$comparison[i], "/", runConfig$comparison[i], ".enrichment.xlsx", sep = "")
-#   file_plots <- paste(diffDataPath, "/", runConfig$comparison[i], "/", runConfig$comparison[i], ".summary_plots.pdf", sep = "")
-#   file_volc <- paste(diffDataPath, "/", runConfig$comparison[i], "/", runConfig$comparison[i], ".PCA_volcano.png", sep = "")
-#   # file_heatmap <- paste(diffDataPath, "/", runConfig$comparison[i], "/", runConfig$comparison[i], ".normCount_heatmap.pdf", sep = "")
-#
-#   file.copy(from = file_deseq2Res, to = newDir)
-#   file.copy(from = file_enrich, to = newDir)
-#   file.copy(from = file_plots, to = newDir)
-#   file.copy(from = file_volc, to = newDir)
-#   # file.copy(from = file_heatmap, to = newDir)
-#
-# }
+##########################################################################
+
+## copy results for sharing
+file_RNAseq_info <-here::here("data", "reference_data", "DESeq2_DEG_info.txt")
+diffDataPath <- here::here("analysis", "02_DESeq2_diff")
+
+runConfig <- suppressMessages(readr::read_tsv(file_RNAseq_info))
+
+tempStore <- here::here("analysis", "temp_store")
+dir.create(tempStore)
+i <- 1
+
+for (i in 1:nrow(runConfig)) {
+
+  newDir <- paste(tempStore, "/", runConfig$comparison[i], sep = "")
+  dir.create(newDir)
+
+  file_deseq2Res <- paste(diffDataPath, "/", runConfig$comparison[i], "/", runConfig$comparison[i], ".DEG_all.xlsx", sep = "")
+  file_enrich <- paste(diffDataPath, "/", runConfig$comparison[i], "/", runConfig$comparison[i], ".enrichment.xlsx", sep = "")
+  file_plots <- paste(diffDataPath, "/", runConfig$comparison[i], "/", runConfig$comparison[i], ".summary_plots.pdf", sep = "")
+  file_volc <- paste(diffDataPath, "/", runConfig$comparison[i], "/", runConfig$comparison[i], ".PCA_volcano.png", sep = "")
+  # file_heatmap <- paste(diffDataPath, "/", runConfig$comparison[i], "/", runConfig$comparison[i], ".normCount_heatmap.pdf", sep = "")
+
+  file.copy(from = file_deseq2Res, to = newDir)
+  file.copy(from = file_enrich, to = newDir)
+  # file.copy(from = file_plots, to = newDir)
+  file.copy(from = file_volc, to = newDir)
+  # file.copy(from = file_heatmap, to = newDir)
+
+}
 
 
 

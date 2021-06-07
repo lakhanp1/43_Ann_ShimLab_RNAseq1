@@ -13,7 +13,7 @@ suppressPackageStartupMessages(library(grid))
 
 rm(list = ls())
 
-source(file = "E:/Chris_UM/GitHub/omics_util/04_GO_enrichment/s01_topGO_functions.R")
+source(file = "E:/Chris_UM/GitHub/omics_util/04_GO_enrichment/s01_enrichment_functions.R")
 source("E:/Chris_UM/GitHub/omics_util/02_RNAseq_scripts/s02_DESeq2_functions.R")
 
 ###########################################################################
@@ -68,7 +68,7 @@ file_RNAseq_info <- args$config
 degResult <- args$deg
 
 # file_RNAseq_info <- here::here("data", "reference_data", "DESeq2_DEG_info.txt")
-# degResult <- "interaction_ARID1A_KO_MEKi"
+# degResult <- "ARID1A_KO_MEKi_vs_WT_DMSO"
 
 outDir <- paste(diffDataPath, degResult, sep = "/")
 outPrefix <- paste(outDir, degResult, sep = "/")
@@ -299,9 +299,9 @@ dev.off()
 
 ###########################################################################
 ## GSEA
-msigdbr_show_species()
+msigdbr_species()
 msig_df <- msigdbr(species = "Homo sapiens") %>%
-  dplyr::filter(gs_cat %in% c("H", "C2", "C5")) %>%
+  dplyr::filter(gs_cat %in% c("H", "C2", "C3", "C5")) %>%
   dplyr::filter(! gs_subcat %in% c("MF", "CC"))
 
 # , category = c("H", "C2", "C5")
@@ -426,6 +426,8 @@ data.table::fwrite(
 )
 
 ###########################################################################
+# topgo_res <- suppressMessages(readr::read_tsv(file = paste(outPrefix, ".topGO.tab", sep = "")))
+# keggp_res <- suppressMessages(readr::read_tsv(file = paste(outPrefix, ".keggProfile.tab", sep = "")))
 
 ## write data to excel file
 descString <- paste("## log2FoldChange cutoff =", cutoff_up, "(up) /", cutoff_down, "(down)",
